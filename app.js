@@ -11,7 +11,7 @@ const path = require('path')
 
 const xljs = new XLJS()
 
-const year = 2016
+const year = 2018
 const term = 'S'
 const departments = ['APBI', 'FNH', 'FOOD', 'FRE', 'GRS', 'HUNU', 'LFS', 'LWS', 'PLNT', 'SOIL']
 const enrolments = false
