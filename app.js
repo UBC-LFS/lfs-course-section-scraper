@@ -11,10 +11,10 @@ const path = require('path')
 
 const xljs = new XLJS()
 
-const year = 2017
-const term = 'W'
-const departments = ['AANB', 'AGEC', 'ANSC', 'APBI', 'FNH', 'FOOD', 'FRE', 'GRS', 'HUNU', 'LFS', 'LWS', 'PLNT', 'SOIL']
-const enrolments = true
+const year = 2018
+const term = 'S'
+const departments = ['APBI', 'FNH', 'FOOD', 'FRE', 'GRS', 'HUNU', 'LFS', 'LWS', 'PLNT', 'SOIL']
+const enrolments = false
 
 const fswrite = util.promisify(fs.writeFile)
 const fsappend = util.promisify(fs.appendFile)
@@ -38,7 +38,10 @@ const getSectionsInCourse = async (dept, course) => {
   const xml = await response.text()
   const json = xljs.xml2js(xml)
   const sections = Array.isArray(json.sections.section) ? json.sections.section : [json.sections.section]
-  const sectionsWithWaitListFiltered = sections.filter(section => section._activity !== 'Waiting List')
+  const sectionsWithWaitListFiltered = sections
+    .filter(section => section._activity !== 'Waiting List')
+    .filter(section => section._activity !== 'Thesis')
+    .filter(section => section._activity !== 'Work Placement')
   const requiredFields = sectionsWithWaitListFiltered
     .map(({ instructors = '', _activity, _credits, _key }) =>
       ({ instructor: instructors.instructor ? instructors.instructor._name : '', activity: _activity, credits: _credits, section: _key }))

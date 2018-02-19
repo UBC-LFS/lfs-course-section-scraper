@@ -29,14 +29,18 @@ const enrolments = true // can be set to false if you false if you don't need en
 
 ### Note
 ## Filtering Activities
-By default, this app will filter out Waiting Lists. To keep Waiting Lists, delete the following in `app.js`:
+By default, this app will filter out Waiting Lists, Thesis, and Work Placements. To keep any of these activities, delete the line(s) that correspond with the filter in `app.js`:
 ``` Javascript 
 .filter(section => section._activity !== 'Waiting List')
+.filter(section => section._activity !== 'Thesis')
+.filter(section => section._activity !== 'Work Placement')
 ```
-Conversely, if you want to filter out more activities (for example, Directed Studies), you can simply append another filter like this:
+Conversely, if you want to filter out more activities (for example, Practicum), you can simply append another filter like this:
 ``` Javascript 
 .filter(section => section._activity !== 'Waiting List')
-.filter(section => section._activity !== 'Directed Studies')
+.filter(section => section._activity !== 'Thesis')
+.filter(section => section._activity !== 'Work Placement')
+.filter(section => section._activity !== 'Practicum')
 ```
 
 ## Enrolments
