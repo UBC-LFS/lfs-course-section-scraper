@@ -4,7 +4,8 @@
   "description": "The Course Section Generator scrapes the courses.students.ubc.ca website to get the sections for the specified year, term, and department codes.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "author": "Justin Lee",
   "license": "ISC",

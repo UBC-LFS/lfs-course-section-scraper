@@ -24,7 +24,7 @@ const departments = ['APBI', 'FNH'] // if you only care about one dept, make sur
 const enrolments = true // can be set to false if you false if you don't need enrolment data (this signficantly improves the execution speed)
 ```
 5. Save `app.js`.
-6. Run using `node app.js`.
+6. Run using `npm start` or `node app.js` (both are equivalent).
 7. Open `output` folder and you will find a csv named by year and term put together (e.g. '2018S.csv'). 
 
 ### Note
