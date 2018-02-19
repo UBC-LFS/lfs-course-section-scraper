@@ -26,6 +26,12 @@ const departments = ['APBI', 'FNH']
 6. Run using `node app.js`.
 7. Open `output` folder and you will find a csv named by year and term put together. 
 
+### Note
+By default, this app will filter out Waiting Lists. To keep Waiting Lists, delete the following (starting at the '.'):
+``` Javascript 
+.filter(section => section._activity !== 'Waiting List')
+```
+
 ## Authors
 
 * **Justin Lee** 
