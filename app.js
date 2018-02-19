@@ -4,10 +4,10 @@ require('isomorphic-fetch')
 const request = require('request-promise')
 const cheerio = require('cheerio')
 const XLJS = require('x2js')
-const c = require('./constants')
 const fs = require('fs')
 const util = require('util')
 const path = require('path')
+const c = require('./constants')
 
 const xljs = new XLJS()
 
