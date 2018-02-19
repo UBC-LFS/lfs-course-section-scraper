@@ -20,20 +20,29 @@ These instructions will get you a copy of the project up and running on your loc
 ``` Javascript
 const year = 2018
 const term = 'S'
-const departments = ['APBI', 'FNH']
+const departments = ['APBI', 'FNH'] // if you only care about one dept, make sure it is surrounded by brackets (e.g. ['APBI'])
+const enrolments = true // can be set to false if you false if you don't need enrolment data (this signficantly improves the execution speed)
 ```
 5. Save `app.js`.
 6. Run using `node app.js`.
 7. Open `output` folder and you will find a csv named by year and term put together (e.g. '2018S.csv'). 
 
 ### Note
+## Filtering Activities
 By default, this app will filter out Waiting Lists. To keep Waiting Lists, delete the following in `app.js`:
 ``` Javascript 
 .filter(section => section._activity !== 'Waiting List')
 ```
+Conversely, if you want to filter out more activities (for example, Directed Studies), you can simply append another filter like this:
+``` Javascript 
+.filter(section => section._activity !== 'Waiting List')
+.filter(section => section._activity !== 'Directed Studies')
+```
 
-### Future Plan
-I'll add an option to get up-to-date enrolment numbers for each section as well. 
+## Enrolments
+There is no way to access enrolment data through the API, so I am scraping the enrolments directly from the webpage itself. This means that if the Seat Summary table changes in structure, it may break the enrolment scraping. Currently the scraping depends on exact string match of the following: 'Total Seats Remaining:', 'Currently Registered:', 'General Seats Remaining:', 'Restricted Seats Remaining*:'. 
+
+If it breaks, make a PR or create an issue and I'll go fix it. 
 
 ## Authors
 
