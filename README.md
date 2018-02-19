@@ -4,7 +4,7 @@ The Course Section Generator scrapes the courses.students.ubc.ca website to get 
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine .
+These instructions will get you a copy of the project up and running on your local machine.
 
 ### Prerequisites
 
