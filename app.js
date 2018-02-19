@@ -14,7 +14,7 @@ const xljs = new XLJS()
 const year = 2017
 const term = 'W'
 const departments = ['AANB', 'AGEC', 'ANSC', 'APBI', 'FNH', 'FOOD', 'FRE', 'GRS', 'HUNU', 'LFS', 'LWS', 'PLNT', 'SOIL']
-const enrolments = false
+const enrolments = true
 
 const fswrite = util.promisify(fs.writeFile)
 const fsappend = util.promisify(fs.appendFile)
@@ -59,7 +59,7 @@ const getEnrolments = async (dept, course, section) => {
     totalSeatsRemaining: scrape('Total Seats Remaining:'),
     currentlyRegistered: scrape('Currently Registered:'),
     generalSeatsRemaining: scrape('General Seats Remaining:'),
-    restrictedSeatsRemaining: scrape('Restricted Seats Remaining:')
+    restrictedSeatsRemaining: scrape('Restricted Seats Remaining*:')
   }
 }
 
