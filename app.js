@@ -1,6 +1,8 @@
 /* global fetch */
 
 require('isomorphic-fetch')
+const request = require('request-promise')
+const cheerio = require('cheerio')
 const XLJS = require('x2js')
 const c = require('./constants')
 const fs = require('fs')
@@ -9,9 +11,10 @@ const path = require('path')
 
 const xljs = new XLJS()
 
-const year = 2018
-const term = 'S'
+const year = 2017
+const term = 'W'
 const departments = ['AANB', 'AGEC', 'ANSC', 'APBI', 'FNH', 'FOOD', 'FRE', 'GRS', 'HUNU', 'LFS', 'LWS', 'PLNT', 'SOIL']
+const enrolments = false
 
 const fswrite = util.promisify(fs.writeFile)
 const fsappend = util.promisify(fs.appendFile)
@@ -26,8 +29,7 @@ const getCoursesInDept = async (dept, year, term) => {
   const xml = await response.text()
   const json = xljs.xml2js(xml)
   const course = Array.isArray(json.courses.course) ? json.courses.course : [json.courses.course]
-  const courseObjs = course
-    .map(({ _key, _title }) => ({ course: _key, description: _title }))
+  const courseObjs = course.map(({ _key, _title }) => ({ course: _key, description: _title }))
   return courseObjs
 }
 
@@ -43,14 +45,38 @@ const getSectionsInCourse = async (dept, course) => {
   return requiredFields
 }
 
+const getEnrolments = async (dept, course, section) => {
+  const url = c.enrolmentURL(year, term, dept, course, section)
+  const options = {
+    uri: url,
+    transform: body => cheerio.load(body)
+  }
+  const $ = await request(options)
+  const scrape = term => $('td').filter(function () {
+    return $(this).text().trim() === term
+  }).next().text()
+  return {
+    totalSeatsRemaining: scrape('Total Seats Remaining:'),
+    currentlyRegistered: scrape('Currently Registered:'),
+    generalSeatsRemaining: scrape('General Seats Remaining:'),
+    restrictedSeatsRemaining: scrape('Restricted Seats Remaining:')
+  }
+}
+
 departments.forEach(async dept => {
-  await writeHeader(c.csvHeaders)
+  enrolments ? await writeHeader(c.csvHeadersWithEnrolment) : await writeHeader(c.csvHeaders)
   const courseObjs = await getCoursesInDept(dept, year, term)
   courseObjs.forEach(async ({ course, description }) => {
     const sections = await getSectionsInCourse(dept, course)
     sections.forEach(async ({ instructor, activity, credits, section }) => {
-      const stringified = [ year, term, dept, course, section, instructor, credits, activity ].map(x => JSON.stringify(x))
-      await append(stringified)
+      if (enrolments) {
+        const { totalSeatsRemaining, currentlyRegistered, generalSeatsRemaining, restrictedSeatsRemaining } = await getEnrolments(dept, course, section)
+        const stringified = [ year, term, dept, course, section, instructor, credits, activity, totalSeatsRemaining, currentlyRegistered, generalSeatsRemaining, restrictedSeatsRemaining ].map(x => JSON.stringify(x))
+        await append(stringified)
+      } else {
+        const stringified = [ year, term, dept, course, section, instructor, credits, activity ].map(x => JSON.stringify(x))
+        await append(stringified)
+      }
     })
   })
 })
