@@ -7,14 +7,19 @@ const fs = require('fs')
 const util = require('util')
 const path = require('path')
 
-const fswrite = util.promisify(fs.writeFile)
-const fsappend = util.promisify(fs.appendFile)
-
 const xljs = new XLJS()
 
 const year = 2018
 const term = 'S'
+const departments = ['AANB', 'AGEC', 'ANSC', 'APBI', 'FNH', 'FOOD', 'FRE', 'GRS', 'HUNU', 'LFS', 'LWS', 'PLNT', 'SOIL']
+
+const fswrite = util.promisify(fs.writeFile)
+const fsappend = util.promisify(fs.appendFile)
+
 const filepath = path.join(__dirname, '/output/', year + term + '.csv')
+
+const writeHeader = header => fswrite(filepath, header + '\r\n')
+const append = row => fsappend(filepath, row + '\r\n')
 
 const getCoursesInDept = async (dept, year, term) => {
   const response = await fetch(c.baseURL + '&' + c.year(year) + '&' + c.term(term) + '&' + 'req=2' + '&' + c.dept(dept) + '&' + 'output=3')
@@ -38,18 +43,13 @@ const getSectionsInCourse = async (dept, course) => {
   return requiredFields
 }
 
-const writeHeader = header => fswrite(filepath, header + '\r\n')
-const append = row => fsappend(filepath, row + '\r\n')
-const stringify = JSON.stringify
-
-c.departments.forEach(async dept => {
+departments.forEach(async dept => {
   await writeHeader(c.csvHeaders)
   const courseObjs = await getCoursesInDept(dept, year, term)
   courseObjs.forEach(async ({ course, description }) => {
     const sections = await getSectionsInCourse(dept, course)
     sections.forEach(async ({ instructor, activity, credits, section }) => {
-      const stringified = [ year, term, dept, course, section, instructor, credits, activity ]
-        .map(x => stringify(x))
+      const stringified = [ year, term, dept, course, section, instructor, credits, activity ].map(x => JSON.stringify(x))
       await append(stringified)
     })
   })
