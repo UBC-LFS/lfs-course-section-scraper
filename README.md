@@ -32,6 +32,9 @@ By default, this app will filter out Waiting Lists. To keep Waiting Lists, delet
 .filter(section => section._activity !== 'Waiting List')
 ```
 
+### Future Plan
+I'll add an option to get up-to-date enrolment numbers for each section as well. 
+
 ## Authors
 
 * **Justin Lee** 
