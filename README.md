@@ -27,8 +27,8 @@ const enrolments = true // can be set to false if you false if you don't need en
 6. Run using `npm start` or `node app.js` (both are equivalent).
 7. Open `output` folder and you will find a csv named by year and term put together (e.g. '2018S.csv'). 
 
-### Note
-## Filtering Activities
+## Note
+### Filtering Activities
 By default, this app will filter out Waiting Lists, Thesis, and Work Placements. To keep any of these activities, delete the line(s) that correspond with the filter in `app.js`:
 ``` Javascript 
 .filter(section => section._activity !== 'Waiting List')
@@ -43,7 +43,7 @@ Conversely, if you want to filter out more activities (for example, Practicum), 
 .filter(section => section._activity !== 'Practicum')
 ```
 
-## Enrolments
+### Enrolments
 There is no way to access enrolment data through the API, so I am scraping the enrolments directly from the webpage itself. This means that if the Seat Summary table changes in structure, it may break the enrolment scraping. Currently the scraping depends on exact string match of the following: 'Total Seats Remaining:', 'Currently Registered:', 'General Seats Remaining:', 'Restricted Seats Remaining*:'. 
 
 If it breaks, make a PR or create an issue and I'll go fix it. 
