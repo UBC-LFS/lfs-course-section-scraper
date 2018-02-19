@@ -1,12 +1,12 @@
 {
   "name": "lfs-section-generator",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "The Course Section Generator scrapes the courses.students.ubc.ca website to get the sections for the specified year, term, and department codes.",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Justin Lee",
   "license": "ISC",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
