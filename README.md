@@ -22,8 +22,9 @@ const year = 2018
 const term = 'S'
 const departments = ['APBI', 'FNH']
 ```
-7. Run using `node app.js`.
-8. Open `output` folder and you will find a csv named by year and term put together. 
+5. Save `app.js`.
+6. Run using `node app.js`.
+7. Open `output` folder and you will find a csv named by year and term put together. 
 
 ## Authors
 
