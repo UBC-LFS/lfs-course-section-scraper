@@ -20,7 +20,8 @@ const getCoursesInDept = async (dept, year, term) => {
   const response = await fetch(c.baseURL + '&' + c.year(year) + '&' + c.term(term) + '&' + 'req=2' + '&' + c.dept(dept) + '&' + 'output=3')
   const xml = await response.text()
   const json = xljs.xml2js(xml)
-  const courseObjs = json.courses.course
+  const course = Array.isArray(json.courses.course) ? json.courses.course : [json.courses.course]
+  const courseObjs = course
     .map(({ _key, _title }) => ({ course: _key, description: _title }))
   return courseObjs
 }
