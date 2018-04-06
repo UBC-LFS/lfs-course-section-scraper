@@ -1,11 +1,12 @@
 /* global fetch */
-
 require('isomorphic-fetch')
 const request = require('request-promise')
 const cheerio = require('cheerio')
 const XLJS = require('x2js')
-const fs = require('fs')
 const util = require('util')
+const fs = require('fs')
+const fswrite = util.promisify(fs.writeFile)
+const fsappend = util.promisify(fs.appendFile)
 const path = require('path')
 const c = require('./constants')
 
@@ -15,9 +16,6 @@ const year = 2018
 const term = 'S'
 const departments = ['APBI', 'FNH', 'FOOD', 'FRE', 'GRS', 'HUNU', 'LFS', 'LWS', 'PLNT', 'SOIL']
 const enrolments = false
-
-const fswrite = util.promisify(fs.writeFile)
-const fsappend = util.promisify(fs.appendFile)
 
 const filepath = path.join(__dirname, '/output/', year + term + '.csv')
 
