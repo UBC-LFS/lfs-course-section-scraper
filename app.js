@@ -12,12 +12,14 @@ const c = require('./constants')
 
 const xljs = new XLJS()
 
+// set your settings here
 const year = 2018
 const term = 'S'
 const departments = ['APBI', 'FNH', 'FOOD', 'FRE', 'GRS', 'HUNU', 'LFS', 'LWS', 'PLNT', 'SOIL']
 const enrolments = false
+// end of settings
 
-const filepath = path.join(__dirname, '/output/', year + term + '.csv')
+const filepath = path.join(__dirname, `/output/${year}${term}.csv`)
 
 const writeHeader = header => fswrite(filepath, header + '\r\n')
 const append = row => fsappend(filepath, row + '\r\n')
