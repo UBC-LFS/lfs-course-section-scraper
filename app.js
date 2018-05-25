@@ -14,7 +14,7 @@ const xljs = new XLJS()
 
 // set your settings here
 const year = 2018
-const term = 'S'
+const term = 'W'
 const departments = ['APBI', 'FNH', 'FOOD', 'FRE', 'GRS', 'HUNU', 'LFS', 'LWS', 'PLNT', 'SOIL']
 const enrolments = false
 // end of settings
@@ -43,13 +43,16 @@ const getSectionsInCourse = async (dept, course) => {
     const xml = await response.text()
     const json = xljs.xml2js(xml)
     const sections = Array.isArray(json.sections.section) ? json.sections.section : [json.sections.section]
+    console.log(sections)
     const sectionsWithWaitListFiltered = sections
       .filter(section => section._activity !== 'Waiting List')
       .filter(section => section._activity !== 'Thesis')
       .filter(section => section._activity !== 'Work Placement')
+      .filter(section => section._activity !== 'Laboratory')
+      .filter(section => section._activity !== 'Tutorial')
     const requiredFields = sectionsWithWaitListFiltered
-      .map(({ instructors = '', _activity, _credits, _key }) =>
-        ({ instructor: instructors.instructor ? instructors.instructor._name : '', activity: _activity, credits: _credits, section: _key }))
+      .map(({ instructors = '', _activity, _credits, _key, teachingunits }) =>
+        ({ instructor: instructors.instructor ? instructors.instructor._name : '', activity: _activity, credits: _credits, section: _key, termcd: teachingunits.teachingunit._termcd }))
     return requiredFields
   } catch (e) {
     console.log(`Failed to get sections for dept=${dept} and course=${course}`, e)
@@ -83,13 +86,15 @@ departments.forEach(async dept => {
   const courseObjs = await getCoursesInDept(dept, year, term)
   courseObjs.forEach(async ({ course, description }) => {
     const sections = await getSectionsInCourse(dept, course)
-    sections.forEach(async ({ instructor, activity, credits, section }) => {
+    sections.forEach(async ({ instructor, activity, credits, section, termcd }) => {
       if (enrolments) {
         const { totalSeatsRemaining, currentlyRegistered, generalSeatsRemaining, restrictedSeatsRemaining } = await getEnrolments(dept, course, section)
-        const stringified = [ year, term, dept, course, section, instructor, credits, activity, totalSeatsRemaining, currentlyRegistered, generalSeatsRemaining, restrictedSeatsRemaining ].map(x => JSON.stringify(x))
+        const stringified = [ year, term, dept, course, section, instructor, credits, activity, totalSeatsRemaining, currentlyRegistered, generalSeatsRemaining, restrictedSeatsRemaining ]
+          .map(x => JSON.stringify(x))
         await append(stringified)
       } else {
-        const stringified = [ year, term, dept, course, section, instructor, credits, activity ].map(x => JSON.stringify(x))
+        const stringified = [ year, term + termcd, dept, course, section, instructor, credits, activity ]
+          .map(x => JSON.stringify(x))
         await append(stringified)
       }
     })
