@@ -43,7 +43,6 @@ const getSectionsInCourse = async (dept, course) => {
     const xml = await response.text()
     const json = xljs.xml2js(xml)
     const sections = Array.isArray(json.sections.section) ? json.sections.section : [json.sections.section]
-    console.log(sections)
     const sectionsWithWaitListFiltered = sections
       .filter(section => section._activity !== 'Waiting List')
       .filter(section => section._activity !== 'Thesis')
