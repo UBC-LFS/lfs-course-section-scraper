@@ -31,7 +31,8 @@ const xljs = new XLJS();
         { title: 'LWS', value: 'LWS' },
         { title: 'PLNT', value: 'PLNT' },
         { title: 'SOIL', value: 'SOIL' }
-      ]
+      ],
+      hint: `Please use the "space" key to select, and the "return" key to submit. Select as many as you'd like!`
     },
     {
       type: 'number',
@@ -50,7 +51,7 @@ const xljs = new XLJS();
     {
       type: 'select',
       name: 'enrolments',
-      message: 'Do you care about enrolment? If you do, be warned that it will take longer to generate this data',
+      message: 'Do you care about enrolment? If you do, be warned that it will take a bit longer to generate this data',
       choices: [
         { title: 'Yes', value: true },
         { title: 'No', value: false }
@@ -120,7 +121,7 @@ const xljs = new XLJS();
         restrictedSeatsRemaining: scrape('Restricted Seats Remaining*:')
       }
     } catch (e) {
-      console.log(`Failed to scrape this url=${url} for the dept=${dept}, course=${course}, and section=${section}`)
+      console.log(`Failed to scrape this url=${url} for the dept=${dept}, course=${course}, and section=${section}`, e)
     }
   }
 
