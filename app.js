@@ -60,7 +60,6 @@ const xljs = new XLJS();
 
   const getEnrolments = async (dept, course, section) => {
     const url = c.enrolmentURL(year, term, dept, course, section)
-    console.log(url)
     const options = {
       uri: url,
       transform: body => cheerio.load(body)
