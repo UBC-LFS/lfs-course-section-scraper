@@ -14,51 +14,7 @@ const c = require('./constants')
 const xljs = new XLJS();
 
 (async function app () {
-  const prompt = [
-    {
-      type: 'multiselect',
-      name: 'depts',
-      message: 'What departments are you interested in?',
-      choices: [
-        { title: 'All of them', value: 'all', selected: true },
-        { title: 'APBI', value: 'APBI' },
-        { title: 'FNH', value: 'FNH' },
-        { title: 'FOOD', value: 'FOOD' },
-        { title: 'FRE', value: 'FRE' },
-        { title: 'GRS', value: 'GRS' },
-        { title: 'HUNU', value: 'HUNU' },
-        { title: 'LFS', value: 'LFS' },
-        { title: 'LWS', value: 'LWS' },
-        { title: 'PLNT', value: 'PLNT' },
-        { title: 'SOIL', value: 'SOIL' }
-      ],
-      hint: `Please use the "space" key to select, and the "return" key to submit. Select as many as you'd like!`
-    },
-    {
-      type: 'number',
-      name: 'year',
-      message: 'What year are you interested in?'
-    },
-    {
-      type: 'select',
-      name: 'term',
-      message: 'What term are you interested in?',
-      choices: [
-        { title: 'Summer', value: 'S' },
-        { title: 'Winter', value: 'W' }
-      ]
-    },
-    {
-      type: 'select',
-      name: 'enrolments',
-      message: 'Do you care about enrolment? If you do, be warned that it will take a bit longer to generate this data',
-      choices: [
-        { title: 'No', value: false },
-        { title: 'Yes', value: true }
-      ]
-    }
-  ]
-  let { depts, year, term, enrolments } = await prompts(prompt)
+  let { depts, year, term, enrolments } = await prompts(c.prompt)
 
   if (depts.includes('all')) {
     depts = ['APBI', 'FNH', 'FOOD', 'FRE', 'GRS', 'HUNU', 'LFS', 'LWS', 'PLNT', 'SOIL']
@@ -75,8 +31,7 @@ const xljs = new XLJS();
       const xml = await response.text()
       const json = xljs.xml2js(xml)
       const course = Array.isArray(json.courses.course) ? json.courses.course : [json.courses.course]
-      const courseObjs = course.map(({ _key, _title }) => ({ course: _key, description: _title }))
-      return courseObjs
+      return course.map(({ _key, _title }) => ({ course: _key, description: _title }))
     } catch (e) {
       console.log(`Failed to get courses for dept=${dept}, year=${year}, and term=${term}`, e)
     }
@@ -105,6 +60,7 @@ const xljs = new XLJS();
 
   const getEnrolments = async (dept, course, section) => {
     const url = c.enrolmentURL(year, term, dept, course, section)
+    console.log(url)
     const options = {
       uri: url,
       transform: body => cheerio.load(body)
@@ -125,23 +81,52 @@ const xljs = new XLJS();
     }
   }
 
-  depts.forEach(async dept => {
-    enrolments ? await writeHeader(c.csvHeadersWithEnrolment) : await writeHeader(c.csvHeaders)
-    const courseObjs = await getCoursesInDept(dept, year, term)
-    courseObjs.forEach(async ({ course, description }) => {
-      const sections = await getSectionsInCourse(dept, course)
-      sections.forEach(async ({ instructor, activity, credits, section, termcd }) => {
-        if (enrolments) {
-          const { totalSeatsRemaining, currentlyRegistered, generalSeatsRemaining, restrictedSeatsRemaining } = await getEnrolments(dept, course, section)
-          const stringified = [year, term, dept, course, section, instructor, credits, activity, totalSeatsRemaining, currentlyRegistered, generalSeatsRemaining, restrictedSeatsRemaining]
-            .map(x => JSON.stringify(x))
-          await append(stringified)
-        } else {
-          const stringified = [year, term + termcd, dept, course, section, instructor, credits, activity]
-            .map(x => JSON.stringify(x))
-          await append(stringified)
-        }
+  try {
+    depts.forEach(async dept => {
+      enrolments ? await writeHeader(c.csvHeadersWithEnrolment) : await writeHeader(c.csvHeaders)
+      const courseObjs = await getCoursesInDept(dept, year, term)
+      courseObjs.forEach(async ({ course, description }) => {
+        const sections = await getSectionsInCourse(dept, course)
+        sections.forEach(async ({ instructor, activity, credits, section, termcd }) => {
+          if (enrolments) {
+            const {
+              totalSeatsRemaining,
+              currentlyRegistered,
+              generalSeatsRemaining,
+              restrictedSeatsRemaining
+            } = await getEnrolments(dept, course, section)
+            const stringified = [
+              year,
+              term,
+              dept,
+              course,
+              section,
+              instructor,
+              credits,
+              activity,
+              totalSeatsRemaining,
+              currentlyRegistered,
+              generalSeatsRemaining,
+              restrictedSeatsRemaining
+            ].map(x => JSON.stringify(x))
+            await append(stringified)
+          } else {
+            const stringified = [
+              year,
+              term + termcd,
+              dept,
+              course,
+              section,
+              instructor,
+              credits,
+              activity
+            ].map(x => JSON.stringify(x))
+            await append(stringified)
+          }
+        })
       })
     })
-  })
+  } catch (e) {
+    console.log(`Failed for the dept=${depts}, year=${year}, term=${term}`, e)
+  }
 })()
