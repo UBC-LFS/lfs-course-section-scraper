@@ -53,8 +53,8 @@ const xljs = new XLJS();
       name: 'enrolments',
       message: 'Do you care about enrolment? If you do, be warned that it will take a bit longer to generate this data',
       choices: [
-        { title: 'Yes', value: true },
-        { title: 'No', value: false }
+        { title: 'No', value: false },
+        { title: 'Yes', value: true }
       ]
     }
   ]
