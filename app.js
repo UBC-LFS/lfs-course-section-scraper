@@ -13,7 +13,7 @@ const c = require('./constants')
 
 const xljs = new XLJS();
 
-(async function app () {
+(async function () {
   let { depts, year, term, enrolments, filterSetting } = await prompts(c.prompt)
 
   if (depts.includes('all')) {
