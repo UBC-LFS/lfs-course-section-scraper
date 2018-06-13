@@ -59,7 +59,7 @@ I've added all the activities I've encountered so far, but I may be missing some
 ### Enrolments
 There is no way to access enrolment data through the API, so I am scraping the enrolments directly from the webpage itself. This means that if the Seat Summary table changes in structure, it may break the enrolment scraping. Currently the scraping depends on exact string match of the following: 'Total Seats Remaining:', 'Currently Registered:', 'General Seats Remaining:', 'Restricted Seats Remaining*:'. 
 
-If it breaks, make a PR or create an issue and I'll go fix it. 
+If it breaks, make a [Pull Request](https://help.github.com/articles/about-pull-requests/) or create an [Issue](https://github.com/UBC-LFS/lfs-course-section-scraper/issues) and I'll go fix it. 
 
 ## Authors
 
