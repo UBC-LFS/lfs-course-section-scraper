@@ -17,7 +17,11 @@ const xljs = new XLJS();
   let { depts, year, term, enrolments, filterSetting } = await prompts(c.prompt)
 
   if (depts.includes('all')) {
-    depts = ['APBI', 'FNH', 'FOOD', 'FRE', 'GRS', 'HUNU', 'LFS', 'LWS', 'PLNT', 'SOIL']
+    depts = c.prompt
+      .find(obj => obj.name === 'depts')
+      .choices
+      .filter(choice => choice.value !== 'all')
+      .map(choice => choice.value)
   }
 
   const filepath = path.join(__dirname, `/output/${year}${term}.csv`)

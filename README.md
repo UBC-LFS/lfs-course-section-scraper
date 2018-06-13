@@ -23,7 +23,7 @@ These instructions will get you a copy of the project up and running on your loc
 ## Note
 
 ### Department Selections
-By default, this app displays the course codes associated with LFS. If you want to run with different course codes, you can do so by editing the `constants.js` file and adding your course code to both `title` and `value` fields, as shown below.
+By default, this app displays the course codes associated with LFS. If you want to run with different course codes, you can do so by editing the `constants.js` file and adding your course code to both `title` and `value` fields, as shown below. By default, all depts are selected. 
 ``` Javascript 
 { title: 'All of them', value: 'all', selected: true },
 { title: 'APBI', value: 'APBI' },
@@ -39,7 +39,7 @@ By default, this app displays the course codes associated with LFS. If you want 
 ```
 
 ### Filterable Activities
-I've added all the activities I've encountered so far, but I may be missing some, so you can add them into the `constants.js` file by adding both the `title` and `value` fields of the activity, as shown below. 
+I've added all the activities I've encountered so far, but I may be missing some, so you can add them into the `constants.js` file by adding both the `title` and `value` fields of the activity, as shown below. Also, by default, Waiting List, Thesis, and Work Placement are selected. You can modify this by setting `selected: false`, and you can add more defaults by adding `selected: true` as needed.
 ``` Javascript 
 { title: 'Waiting List', value: 'Waiting List', selected: true },
 { title: 'Thesis', value: 'Thesis', selected: true },
