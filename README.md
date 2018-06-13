@@ -21,7 +21,8 @@ These instructions will get you a copy of the project up and running on your loc
 1. Open `output` folder and you will find a csv named by year and term put together (e.g. '2018S.csv'). 
 
 ## Note
-### Filtering Activities
+
+### Department Selections
 By default, this app displays the course codes associated with LFS. If you want to run with different course codes, you can do so by editing the `constants.js` file and adding your course code to both `title` and `value` fields, as shown below.
 ``` Javascript 
 { title: 'All of them', value: 'all', selected: true },
@@ -35,6 +36,24 @@ By default, this app displays the course codes associated with LFS. If you want 
 { title: 'LWS', value: 'LWS' },
 { title: 'PLNT', value: 'PLNT' },
 { title: 'SOIL', value: 'SOIL' }
+```
+
+### Filterable Activities
+I've added all the activities I've encountered so far, but I may be missing some, so you can add them into the `constants.js` file by adding both the `title` and `value` fields of the activity, as shown below. 
+``` Javascript 
+{ title: 'Waiting List', value: 'Waiting List', selected: true },
+{ title: 'Thesis', value: 'Thesis', selected: true },
+{ title: 'Work Placement', value: 'Work Placement', selected: true },
+{ title: 'Practicum', value: 'Practicum' },
+{ title: 'Directed Studies', value: 'Directed Studies' },
+{ title: 'Seminar', value: 'Seminar' },
+{ title: 'Lecture', value: 'Lecture' },
+{ title: 'Web-Oriented Course', value: 'Web-Oriented Course' },
+{ title: 'Distance Education', value: 'Distance Education' },
+{ title: 'Essay/Report', value: 'Essay/Report' },
+{ title: 'Tutorial', value: 'Tutorial' },
+{ title: 'Project', value: 'Project' },
+{ title: 'Laboratory', value: 'Laboratory' }
 ```
 
 ### Enrolments
