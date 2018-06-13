@@ -14,33 +14,27 @@ These instructions will get you a copy of the project up and running on your loc
 ### Installing and Setup
 
 1. First, clone this repo. `git clone https://github.com/UBC-LFS/lfs-course-section-scraper.git`
-2. Then cd into the repo. `cd lfs-course-section-scraper`
-3. Run the installation script. `npm install` (If you see `babel-node: command not found`, you've missed this step.)
-4. Open `app.js` and edit the following variables:
-``` Javascript
-const year = 2018
-const term = 'S'
-const departments = ['APBI', 'FNH'] // if you only care about one dept, make sure it is surrounded by brackets (e.g. ['APBI'])
-const enrolments = true // can be set to false if you false if you don't need enrolment data (this signficantly improves the execution speed)
-```
-5. Save `app.js`.
-6. Run using `npm start` or `node app.js` (both are equivalent).
-7. Open `output` folder and you will find a csv named by year and term put together (e.g. '2018S.csv'). 
+1. Then cd into the repo. `cd lfs-course-section-scraper`
+1. Run the installation script. `npm install` (If you see `babel-node: command not found`, you've missed this step.)
+1. Run using `npm start` or `node app.js` (both are equivalent).
+1. A command line prompt will show up. Select the needed options and the script will run with the options selected.
+1. Open `output` folder and you will find a csv named by year and term put together (e.g. '2018S.csv'). 
 
 ## Note
 ### Filtering Activities
-By default, this app will filter out Waiting Lists, Thesis, and Work Placements. To keep any of these activities, delete the line(s) that correspond with the filter in `app.js`:
+By default, this app displays the course codes associated with LFS. If you want to run with different course codes, you can do so by editing the `constants.js` file and adding your course code to both `title` and `value` fields, as shown below.
 ``` Javascript 
-.filter(section => section._activity !== 'Waiting List')
-.filter(section => section._activity !== 'Thesis')
-.filter(section => section._activity !== 'Work Placement')
-```
-Conversely, if you want to filter out more activities (for example, Practicum), you can simply append another filter like this:
-``` Javascript 
-.filter(section => section._activity !== 'Waiting List')
-.filter(section => section._activity !== 'Thesis')
-.filter(section => section._activity !== 'Work Placement')
-.filter(section => section._activity !== 'Practicum')
+{ title: 'All of them', value: 'all', selected: true },
+{ title: 'APBI', value: 'APBI' },
+{ title: 'FNH', value: 'FNH' },
+{ title: 'FOOD', value: 'FOOD' },
+{ title: 'FRE', value: 'FRE' },
+{ title: 'GRS', value: 'GRS' },
+{ title: 'HUNU', value: 'HUNU' },
+{ title: 'LFS', value: 'LFS' },
+{ title: 'LWS', value: 'LWS' },
+{ title: 'PLNT', value: 'PLNT' },
+{ title: 'SOIL', value: 'SOIL' }
 ```
 
 ### Enrolments

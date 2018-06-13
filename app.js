@@ -14,7 +14,7 @@ const c = require('./constants')
 const xljs = new XLJS();
 
 (async function app () {
-  let { depts, year, term, enrolments } = await prompts(c.prompt)
+  let { depts, year, term, enrolments, filterSetting } = await prompts(c.prompt)
 
   if (depts.includes('all')) {
     depts = ['APBI', 'FNH', 'FOOD', 'FRE', 'GRS', 'HUNU', 'LFS', 'LWS', 'PLNT', 'SOIL']
@@ -44,11 +44,7 @@ const xljs = new XLJS();
       const json = xljs.xml2js(xml)
       const sections = Array.isArray(json.sections.section) ? json.sections.section : [json.sections.section]
       const sectionsWithWaitListFiltered = sections
-        .filter(section => section._activity !== 'Waiting List')
-        .filter(section => section._activity !== 'Thesis')
-        .filter(section => section._activity !== 'Work Placement')
-        .filter(section => section._activity !== 'Laboratory')
-        .filter(section => section._activity !== 'Tutorial')
+        .filter(({ _activity }) => (!filterSetting.includes(_activity)))
       const requiredFields = sectionsWithWaitListFiltered
         .map(({ instructors = '', _activity, _credits, _key, teachingunits }) =>
           ({ instructor: instructors.instructor ? instructors.instructor._name : '', activity: _activity, credits: _credits, section: _key, termcd: teachingunits.teachingunit._termcd }))

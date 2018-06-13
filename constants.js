@@ -71,6 +71,27 @@ const prompt = [
       { title: 'No', value: false },
       { title: 'Yes', value: true }
     ]
+  },
+  {
+    type: 'multiselect',
+    name: 'filterSetting',
+    message: 'What activities should be filtered out (not included)?',
+    choices: [
+      { title: 'Waiting List', value: 'Waiting List', selected: true },
+      { title: 'Thesis', value: 'Thesis', selected: true },
+      { title: 'Work Placement', value: 'Work Placement', selected: true },
+      { title: 'Practicum', value: 'Practicum' },
+      { title: 'Directed Studies', value: 'Directed Studies' },
+      { title: 'Seminar', value: 'Seminar' },
+      { title: 'Lecture', value: 'Lecture' },
+      { title: 'Web-Oriented Course', value: 'Web-Oriented Course' },
+      { title: 'Distance Education', value: 'Distance Education' },
+      { title: 'Essay/Report', value: 'Essay/Report' },
+      { title: 'Tutorial', value: 'Tutorial' },
+      { title: 'Project', value: 'Project' },
+      { title: 'Laboratory', value: 'Laboratory' }
+    ],
+    hint: `Please use the "space" key to select, and the "return" key to submit. Select as many as you'd like!`
   }
 ]
 module.exports = {
