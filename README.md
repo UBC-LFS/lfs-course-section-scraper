@@ -1,6 +1,6 @@
 # Course Section Generator
 
-The Course Section Generator scrapes the courses.students.ubc.ca website to get the sections for the specified year, term, and department codes. 
+The Course Section Generator scrapes the [courses.students.ubc.ca](https://courses.students.ubc.ca/cs/main?newSession=true) website to get the sections for the specified year, term, and department codes. 
 
 ## Getting Started
 
