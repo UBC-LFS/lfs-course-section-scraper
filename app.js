@@ -18,8 +18,7 @@ const xljs = new XLJS();
 
   if (depts.includes('all')) {
     depts = c.prompt
-      .find(obj => obj.name === 'depts')
-      .choices
+      .find(obj => obj.name === 'depts').choices
       .filter(choice => choice.value !== 'all')
       .map(choice => choice.value)
   }
