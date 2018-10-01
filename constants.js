@@ -11,7 +11,9 @@ const csvHeaders = [
   'Section',
   'Instructor',
   'Credits',
-  'Activity'
+  'Activity',
+  'Building',
+  'Room'
 ]
 const csvHeadersWithEnrolment = [
   'Year',
@@ -22,6 +24,8 @@ const csvHeadersWithEnrolment = [
   'Instructor',
   'Credits',
   'Activity',
+  'Building',
+  'Room',
   'Total Seats Remaining',
   'Currently Registered',
   'General Seats Remaining',
