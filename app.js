@@ -50,7 +50,18 @@ const xljs = new XLJS();
         .filter(({ _activity }) => (!filterSetting.includes(_activity)))
       const requiredFields = sectionsWithWaitListFiltered
         .map(({ instructors = '', _activity, _credits, _key, teachingunits }) =>
-          ({ instructor: instructors.instructor ? instructors.instructor._name : '', activity: _activity, credits: _credits, section: _key, termcd: teachingunits.teachingunit._termcd }))
+          ({
+            instructor: instructors.instructor
+              ? instructors.instructor._name : '',
+            activity: _activity,
+            credits: _credits,
+            section: _key,
+            termcd: teachingunits.teachingunit._termcd,
+            building: Array.isArray(teachingunits.teachingunit.meetings.meeting)
+              ? teachingunits.teachingunit.meetings.meeting.map(({ _buildingcd, _roomno }) => `${_buildingcd} ${_roomno}`).join(',')
+              : teachingunits.teachingunit.meetings.meeting['_buildingcd'] + ' ' + teachingunits.teachingunit.meetings.meeting['_roomno']
+          })
+        )
       return requiredFields
     } catch (e) {
       console.log(`Failed to get sections for dept=${dept} and course=${course}`, e)
@@ -85,7 +96,7 @@ const xljs = new XLJS();
       const courseObjs = await getCoursesInDept(dept, year, term)
       courseObjs.forEach(async ({ course, description }) => {
         const sections = await getSectionsInCourse(dept, course)
-        sections.forEach(async ({ instructor, activity, credits, section, termcd }) => {
+        sections.forEach(async ({ instructor, activity, credits, section, termcd, building }) => {
           if (enrolments) {
             const {
               totalSeatsRemaining,
@@ -102,6 +113,7 @@ const xljs = new XLJS();
               instructor,
               credits,
               activity,
+              building,
               totalSeatsRemaining,
               currentlyRegistered,
               generalSeatsRemaining,
@@ -117,7 +129,8 @@ const xljs = new XLJS();
               section,
               instructor,
               credits,
-              activity
+              activity,
+              building
             ].map(x => JSON.stringify(x))
             await append(stringified)
           }
