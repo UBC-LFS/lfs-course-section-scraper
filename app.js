@@ -45,7 +45,6 @@ const xljs = new XLJS();
       const response = await fetch(c.baseURL + '&' + c.year(year) + '&' + c.term(term) + '&' + 'req=4' + '&' + c.dept(dept) + '&' + c.course(course) + '&' + 'output=3')
       const xml = await response.text()
       const json = xljs.xml2js(xml)
-      // console.log(JSON.stringify(json, null, 2))
       const sections = Array.isArray(json.sections.section) ? json.sections.section : [json.sections.section]
       const sectionsWithWaitListFiltered = sections
         .filter(({ _activity }) => (!filterSetting.includes(_activity)))
