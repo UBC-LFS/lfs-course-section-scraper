@@ -68,7 +68,22 @@ const xljs = new XLJS();
     }
   }
 
-  const getEnrolments = async (dept, course, section) => {
+  const getInstructorInfo = async (url) => {
+    const options = { uri: url, transform: body => cheerio.load(body) }
+    const $ = await request(options)
+
+    try {
+      const getEmail = keyword => $('table tbody td').filter(function() {
+        return $(this).text().trim() === keyword
+      }).next()
+
+      return getEmail('Name:').text() + ' (' + getEmail('Email:').text() + ')'
+    } catch (e) {
+      console.log(`Failed to get details of an instructor at url=${url}`, e)
+    }
+  }
+
+  const getEnrolments = async (enrolments, dept, course, section) => {
     const url = c.enrolmentURL(year, term, dept, course, section)
     const options = {
       uri: url,
@@ -78,12 +93,34 @@ const xljs = new XLJS();
       const $ = await request(options)
       const scrape = term => $('td').filter(function () {
         return $(this).text().trim() === term
-      }).next().text()
+      }).next()
+
+      const instructorInfo = scrape('Instructor:')
+      const courseDetailUrl = instructorInfo.children('a').attr('href')
+
+      let instructorEmail = ''
+      if (instructorInfo.children('a').attr('href') !== undefined) {
+        instructorEmail = await getInstructorInfo(c.rootURL + courseDetailUrl)
+      }
+
+      let totalSeatsRemaining = ''
+      let currentlyRegistered = ''
+      let generalSeatsRemaining = ''
+      let restrictedSeatsRemaining = ''
+
+      if (enrolments) {
+        totalSeatsRemaining = scrape('Total Seats Remaining:').text()
+        currentlyRegistered = scrape('Currently Registered:').text()
+        generalSeatsRemaining = scrape('General Seats Remaining:').text()
+        restrictedSeatsRemaining = scrape('Restricted Seats Remaining*:').text()
+      }
+
       return {
-        totalSeatsRemaining: scrape('Total Seats Remaining:'),
-        currentlyRegistered: scrape('Currently Registered:'),
-        generalSeatsRemaining: scrape('General Seats Remaining:'),
-        restrictedSeatsRemaining: scrape('Restricted Seats Remaining*:')
+        instructorEmail,
+        totalSeatsRemaining,
+        currentlyRegistered,
+        generalSeatsRemaining,
+        restrictedSeatsRemaining
       }
     } catch (e) {
       console.log(`Failed to scrape this url=${url} for the dept=${dept}, course=${course}, and section=${section}`, e)
@@ -97,20 +134,21 @@ const xljs = new XLJS();
       courseObjs.forEach(async ({ course, description }) => {
         const sections = await getSectionsInCourse(dept, course)
         sections.forEach(async ({ instructor, activity, credits, section, termcd, building }) => {
+          const {
+            instructorEmail,
+            totalSeatsRemaining,
+            currentlyRegistered,
+            generalSeatsRemaining,
+            restrictedSeatsRemaining
+          } = await getEnrolments(enrolments, dept, course, section)
           if (enrolments) {
-            const {
-              totalSeatsRemaining,
-              currentlyRegistered,
-              generalSeatsRemaining,
-              restrictedSeatsRemaining
-            } = await getEnrolments(dept, course, section)
             const stringified = [
               year,
               term,
               dept,
               course,
               section,
-              instructor,
+              instructorEmail,
               credits,
               activity,
               building,
@@ -127,7 +165,7 @@ const xljs = new XLJS();
               dept,
               course,
               section,
-              instructor,
+              instructorEmail,
               credits,
               activity,
               building

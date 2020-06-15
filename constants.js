@@ -1,3 +1,4 @@
+const rootURL = 'https://courses.students.ubc.ca'
 const baseURL = `https://courses.students.ubc.ca/cs/servlets/SRVCourseSchedule?`
 const year = year => `sessyr=${year}`
 const term = term => `sesscd=${term}`
@@ -97,6 +98,7 @@ const prompt = [
   }
 ]
 module.exports = {
+  rootURL,
   baseURL,
   year,
   term,
